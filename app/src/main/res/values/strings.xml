@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">WhatsForDinner</string>
+    <string name="recipe_search">Recipe Search</string>
+    <string name="ingredients">Ingredients (Max 10)</string>
+    <string name="ingredient_name">Ingredient Name</string>
+    <string name="add_ingredient_button">Add Ingredient</string>
+    <string name="ingredient_search">Search</string>
 </resources>
