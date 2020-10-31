@@ -25,6 +25,7 @@ import android.widget.EditText;
 public class RecipeSearchFragment extends Fragment implements View.OnClickListener{
     private EditText mIngredients;
     private String TAG = "RecipeSearchFragment";
+    private String[] parsed_ingredients;
 
     @Nullable
     @Override
@@ -45,11 +46,14 @@ public class RecipeSearchFragment extends Fragment implements View.OnClickListen
             searchButton.setOnClickListener(this);
         }
 
+        parsed_ingredients = new String[10];
+
         return v;
     }
 
     @Override
     public void onResume() {
+        parsed_ingredients = new String[10];
         super.onResume();
         try{
             AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -78,22 +82,23 @@ public class RecipeSearchFragment extends Fragment implements View.OnClickListen
     }
 
     public void ParseIngredients(View view){
-        String[] parsed_ingredients = new String[mIngredients.getLineCount()];
         String ingredients = mIngredients.getText().toString();
         int count = 0;
         parsed_ingredients[0] = "";
         for(int i = 0; i < ingredients.length(); i++){
             char c = ingredients.charAt(i);
-            if(c != '\n' && c != ','){
-                parsed_ingredients[count] += c;
+            if(c == '\n' || c == ','){
+                if(i < ingredients.length()-1) {
+                    char c_next = ingredients.charAt(i + 1);
+                    if (c_next == ' ' || c_next == '\n') {
+                        i++;
+                    }
+                    count++;
+                    parsed_ingredients[count] = "";
+                }
             }
             else{
-                char c_next = ingredients.charAt(i+1);
-                if(c_next == ' ' || c_next == '\n'){
-                    i++;
-                }
-                count++;
-                parsed_ingredients[count] = "";
+                parsed_ingredients[count] += c;
             }
         }
         Intent i = new Intent(getActivity().getApplicationContext(), RecipeSearchResultsActivity.class);

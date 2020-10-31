@@ -3,6 +3,7 @@ package com.mobiledev.ourapp.whatsfordinner;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -43,7 +45,7 @@ import java.util.ArrayList;
 /**
  *
  */
-public class RecipeSearchResultsFragment extends Fragment implements View.OnClickListener {
+public class RecipeSearchResultsFragment extends Fragment implements ListView.OnItemClickListener{
     private ListView mRecipeListView;
     private ArrayList<String> list = new ArrayList<>();
     private ArrayAdapter<String> adapter;
@@ -53,7 +55,6 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
     private String[] parsed_ingredients;
     private JSONObject json_request;
     private RecipeObject[] recipes;
-    final int TIMEOUT_MS = 10000;
 
     @Nullable
     @Override
@@ -72,6 +73,7 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
         }
         mResponseText = v.findViewById(R.id.response_text);
         mRecipeListView = v.findViewById(R.id.recipe_list_view);
+        mRecipeListView.setOnItemClickListener(this);
 
         adapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_recipe, list);
         mRecipeListView.setAdapter(adapter);
@@ -86,17 +88,20 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
     }
 
     public void SearchIngredients(){
-        String url_prefix = "https://api.spoonacular.com/recipes/complexSearch";
-        String name_searches = "?query=";
-        String API = "&apiKey=2a2d2eb2a406445482580f09236687b4";
-        String number = "&number=100";
+        String url_prefix = "https://api.edamam.com/search";
+        String name_searches = "?q=";
+        String app_id = "&app_id=3658f3fd";
+        String API = "&app_key=c067d1f070733bd6232423f5a5fe4b00";
+        String number = "&from=0&to=100";
         for(int i = 0; i < parsed_ingredients.length; i++){
-            name_searches += parsed_ingredients[i];
-            if(i < parsed_ingredients.length-1){
-                name_searches += " ";
+            if(parsed_ingredients[i] != null){
+                name_searches += parsed_ingredients[i];
+            }
+            if(i < parsed_ingredients.length){
+                name_searches += ",";
             }
         }
-        String url = url_prefix+name_searches+number+API;
+        String url = url_prefix+name_searches+app_id+API+number;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -107,37 +112,39 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mResponseText.setText("that didn't work!");
+                list.add("Uh oh!");
+                adapter.notifyDataSetChanged();
             }
         });
-        jsonObjectRequest.setTag("getRequest");
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
-                TIMEOUT_MS,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        ));
         requestQueue.add(jsonObjectRequest);
     }
 
     public void ParseResponse(){
         JSONArray array;
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try{
-            array = json_request.getJSONArray("results");
+            array = json_request.getJSONArray("hits");
             recipes = new RecipeObject[array.length()];
-            String RecipeList = "";
-            recipes = gson.fromJson(array.toString(), RecipeObject[].class);
+            for(int i = 0; i < array.length(); i++){
+                recipes[i] = new RecipeObject(array.getJSONObject(i).getJSONObject("recipe"));
+            }
             for(RecipeObject recipe : recipes){
-                list.add(recipe.getTitle());
+                list.add(recipe.getLabel());
             }
             adapter.notifyDataSetChanged();
         }catch(Exception e){
-            mResponseText.setText("That didn't work");
+            list.add("Uh oh!");
+            adapter.notifyDataSetChanged();
         }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onClick(View view) {
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        String url = recipes[i].getUrl();
 
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
