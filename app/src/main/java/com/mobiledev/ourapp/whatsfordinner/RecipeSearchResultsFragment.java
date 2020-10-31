@@ -47,10 +47,9 @@ import java.util.ArrayList;
  */
 public class RecipeSearchResultsFragment extends Fragment implements ListView.OnItemClickListener{
     private ListView mRecipeListView;
-    private ArrayList<String> list = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
+    private ArrayList<SubjectData> list = new ArrayList<>();
+    private CustomAdapter customAdapter;
 
-    private TextView mResponseText;
     private RequestQueue requestQueue;
     private String[] parsed_ingredients;
     private JSONObject json_request;
@@ -71,12 +70,10 @@ public class RecipeSearchResultsFragment extends Fragment implements ListView.On
         else{
             v = inflater.inflate(R.layout.fragment_recipe_search_results, container, false);
         }
-        mResponseText = v.findViewById(R.id.response_text);
-        mRecipeListView = v.findViewById(R.id.recipe_list_view);
+        mRecipeListView = v.findViewById(R.id.list);
         mRecipeListView.setOnItemClickListener(this);
 
-        adapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_recipe, list);
-        mRecipeListView.setAdapter(adapter);
+        customAdapter = new CustomAdapter(getActivity(), list);
 
         return v;
     }
@@ -112,8 +109,7 @@ public class RecipeSearchResultsFragment extends Fragment implements ListView.On
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                list.add("Uh oh!");
-                adapter.notifyDataSetChanged();
+                list.add(new SubjectData("Uh oh!", null, null));
             }
         });
         requestQueue.add(jsonObjectRequest);
@@ -128,14 +124,13 @@ public class RecipeSearchResultsFragment extends Fragment implements ListView.On
                 recipes[i] = new RecipeObject(array.getJSONObject(i).getJSONObject("recipe"));
             }
             for(RecipeObject recipe : recipes){
-                list.add(recipe.getLabel());
+                list.add(new SubjectData(recipe.getLabel(), recipe.getUrl(), recipe.getImage()));
             }
-            adapter.notifyDataSetChanged();
         }catch(Exception e){
-            list.add("Uh oh!");
-            adapter.notifyDataSetChanged();
+            list.add(new SubjectData("Uh oh!", null, null));
         }
-        adapter.notifyDataSetChanged();
+
+        mRecipeListView.setAdapter(customAdapter);
     }
 
     @Override

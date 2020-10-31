@@ -22,6 +22,10 @@ public class RecipeObject {
         return url;
     }
 
+    public String getImage() {
+        return image;
+    }
+
     public String toString(){
         return "\nLabel: " + label + "\n\n";
     }
