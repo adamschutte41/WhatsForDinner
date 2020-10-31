@@ -71,7 +71,6 @@ public class RecipeSearchResultsFragment extends Fragment implements ListView.On
             v = inflater.inflate(R.layout.fragment_recipe_search_results, container, false);
         }
         mRecipeListView = v.findViewById(R.id.list);
-        mRecipeListView.setOnItemClickListener(this);
 
         customAdapter = new CustomAdapter(getActivity(), list);
 
@@ -131,6 +130,7 @@ public class RecipeSearchResultsFragment extends Fragment implements ListView.On
         }
 
         mRecipeListView.setAdapter(customAdapter);
+        mRecipeListView.setOnItemClickListener(this);
     }
 
     @Override

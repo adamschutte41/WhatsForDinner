@@ -53,11 +53,6 @@ class CustomAdapter implements ListAdapter {
         if(convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             convertView = layoutInflater.inflate(R.layout.list_item_recipe, null);
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });
             TextView tittle = convertView.findViewById(R.id.title);
             ImageView imag = convertView.findViewById(R.id.list_image);
             tittle.setText(subjectData.SubjectName);
