@@ -17,13 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
 
 /**
  * A fragment class for the recipe search
@@ -32,15 +25,12 @@ import com.android.volley.toolbox.Volley;
 public class RecipeSearchFragment extends Fragment implements View.OnClickListener{
     private EditText mIngredients;
     private String TAG = "RecipeSearchFragment";
-    private RequestQueue requestQueue;
-    private final String[] response_text = new String[1];
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v;
         Activity activity = getActivity();
-        requestQueue = Volley.newRequestQueue(getActivity());
 
         if(activity != null){
             v = inflater.inflate(R.layout.fragment_recipe_search, container, false);
@@ -106,37 +96,9 @@ public class RecipeSearchFragment extends Fragment implements View.OnClickListen
                 parsed_ingredients[count] = "";
             }
         }
-        SearchIngredients(parsed_ingredients);
-    }
-
-    public void SearchIngredients(String[] parsed_ingredients){
-        String url_prefix = "https://api.edamam.com/search";
-        String name_searches = "";
-        String app_id = "&app_id=3658f3fd";
-        String API = "&app_key=c067d1f070733bd6232423f5a5fe4b00";
-        for(int i = 0; i < parsed_ingredients.length; i++){
-            name_searches += "?q="+ parsed_ingredients[i];
-        }
-        String url = url_prefix+name_searches+app_id+API;
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                response_text[0] = response.toString();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                response_text[0] = "That didn't work!";
-            }
-        });
-        requestQueue.add(stringRequest);
-
-        if(response_text[0] != null) {
-            Intent i = new Intent(getActivity().getApplicationContext(), RecipeSearchResultsActivity.class);
-            i.putExtra("KEY", response_text);
-            startActivity(i);
-        }
+        Intent i = new Intent(getActivity().getApplicationContext(), RecipeSearchResultsActivity.class);
+        i.putExtra("KEY", parsed_ingredients);
+        startActivity(i);
     }
 
 }

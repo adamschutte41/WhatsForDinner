@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipe_list_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecipeSearchResultsFragment">
-
-    <TextView
-        android:id="@+id/response_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="18dp"
-        android:text="@string/recipe_search"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-</ScrollView>
+    android:layout_margin="8dp"
+    tools:context=".RecipeSearchResultsFragment" />

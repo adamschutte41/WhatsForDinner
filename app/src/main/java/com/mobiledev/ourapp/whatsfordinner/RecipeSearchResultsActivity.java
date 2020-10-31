@@ -7,15 +7,13 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 public class RecipeSearchResultsActivity extends SingleFragmentActivity {
-    private String response;
+    private String[] parsed_ingredients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            response = extras.getString("KEY");
-        }
+        parsed_ingredients = extras.getStringArray("KEY");
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -25,6 +23,10 @@ public class RecipeSearchResultsActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return new RecipeSearchResultsFragment(response);
+        Bundle bundle = new Bundle();
+        bundle.putStringArray("edttext", parsed_ingredients);
+        RecipeSearchResultsFragment fragobj = new RecipeSearchResultsFragment();
+        fragobj.setArguments(bundle);
+        return fragobj;
     }
 }
