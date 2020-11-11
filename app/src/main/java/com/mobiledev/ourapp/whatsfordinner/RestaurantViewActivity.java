@@ -63,7 +63,7 @@ public class RestaurantViewActivity extends AppCompatActivity{
             super(context, textViewResourceId, list);
             this.list = new ArrayList<Restaurant>();
             this.list.addAll(list);
-            db = db.getInstance(getApplicationContext());
+            db = DatabaseHelper.getInstance(getApplicationContext());
         }
 
         @Override
@@ -95,7 +95,6 @@ public class RestaurantViewActivity extends AppCompatActivity{
                 holder.name = convertView.findViewById(R.id.name);
                 holder.price = convertView.findViewById(R.id.price);
                 holder.location = convertView.findViewById(R.id.location);
-                holder.menu = convertView.findViewById(R.id.menu);
                 holder.saveBtn = convertView.findViewById(R.id.save_rest);
                 convertView.setTag(holder);
 
@@ -112,7 +111,6 @@ public class RestaurantViewActivity extends AppCompatActivity{
             holder.price.setText(priceStr);
             holder.name.setText(restaurant.name);
             holder.location.setText(restaurant.location);
-            holder.menu.setText(restaurant.menu);
             holder.name.setTag(restaurant);
             holder.saveBtn.setTag(restaurant.name);
 

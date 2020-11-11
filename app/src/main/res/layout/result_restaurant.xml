@@ -33,20 +33,13 @@
         android:layout_marginTop="30dp"
         android:text="TextView" />
 
-    <TextView
-        android:id="@+id/menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="60dp"
-        android:text="TextView" />
-
     <Button
         android:id="@+id/save_rest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="90dp"
-        android:text="TextView" />
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="15dp"
+        android:text="Save to Favorites" />
 
 </RelativeLayout>

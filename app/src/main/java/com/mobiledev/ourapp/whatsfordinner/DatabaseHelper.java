@@ -1,10 +1,14 @@
 package com.mobiledev.ourapp.whatsfordinner;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -79,47 +83,47 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String STEP_TO_RECIPE_ID = "step_to_recipe_id";
 
     private static final String CREATE_TABLE_USER = "CREATE TABLE "
-            + TABLE_USER + "(" + USER_ID + " INTEGER PRIMARY KEY," + USERNAME
+            + TABLE_USER + "(" + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + USERNAME
             + " TEXT," + PASSWORD + " TEXT," + LOCATION
             + " TEXT" + ")";
 
     private static final String CREATE_TABLE_RESTAURANT = "CREATE TABLE "
-            + TABLE_RESTAURANT + "(" + RESTAURANT_ID + " INTEGER PRIMARY KEY," + NAME
+            + TABLE_RESTAURANT + "(" + RESTAURANT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + NAME
             + " TEXT," + IS_LOCAL + " BOOLEAN," + LOCATION
             + " TEXT," + TYPE + " TEXT," + SUBTYPE + " TEXT,"
             + PRICE_LEVEL + " INTEGER," + RATING + " INTEGER,"
             + IS_TOP_RATED + " BOOLEAN" + ")";
 
     private static final String CREATE_TABLE_QUESTION = "CREATE TABLE "
-            + TABLE_QUESTION + "(" + QUESTION_ID + " INTEGER PRIMARY KEY," + QUESTION
+            + TABLE_QUESTION + "(" + QUESTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + QUESTION
             + " TEXT" + ")";
 
     private static final String CREATE_TABLE_RECIPE = "CREATE TABLE "
-            + TABLE_RECIPE + "(" + RECIPE_ID + " INTEGER PRIMARY KEY," + NAME
+            + TABLE_RECIPE + "(" + RECIPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + NAME
             + " TEXT," + TYPE + " TEXT" + ")";
 
     private static final String CREATE_TABLE_INGREDIENT = "CREATE TABLE "
-            + TABLE_INGREDIENT + "(" + INGREDIENT_ID + " INTEGER PRIMARY KEY," + NAME
+            + TABLE_INGREDIENT + "(" + INGREDIENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + NAME
             + " TEXT" +  ")";
 
     private static final String CREATE_TABLE_RECIPE_STEP = "CREATE TABLE "
-            + TABLE_RECIPE_STEP + "(" + RECIPE_STEP_ID + " INTEGER PRIMARY KEY," + STEP
+            + TABLE_RECIPE_STEP + "(" + RECIPE_STEP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + STEP
             + " TEXT" + ")";
 
     private static final String CREATE_TABLE_FAVORITE_RESTAURANT = "CREATE TABLE "
-            + TABLE_FAVORITE_RESTAURANT + "(" + FAVORITE_RESTAURANT_ID + " INTEGER PRIMARY KEY," + USER_ID
+            + TABLE_FAVORITE_RESTAURANT + "(" + FAVORITE_RESTAURANT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + USER_ID
             + " INTEGER," + RESTAURANT_ID + " INTEGER" + ")";
 
     private static final String CREATE_TABLE_FAVORITE_RECIPE = "CREATE TABLE "
-            + TABLE_FAVORITE_RECIPES+ "(" + FAVORITE_RECIPE_ID + " INTEGER PRIMARY KEY," + USER_ID
+            + TABLE_FAVORITE_RECIPES+ "(" + FAVORITE_RECIPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + USER_ID
             + " INTEGER," + RECIPE_ID + " INTEGER" + ")";
 
     private static final String CREATE_TABLE_INGREDIENT_TO_RECIPE = "CREATE TABLE "
-            + TABLE_INGREDIENT_TO_RECIPE + "(" + INGREDIENT_TO_RECIPE_ID + " INTEGER PRIMARY KEY," + RECIPE_ID
+            + TABLE_INGREDIENT_TO_RECIPE + "(" + INGREDIENT_TO_RECIPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + RECIPE_ID
             + " INTEGER," + INGREDIENT_ID + " INTEGER" + ")";
 
     private static final String CREATE_TABLE_STEP_TO_RECIPE = "CREATE TABLE "
-            + TABLE_STEP_TO_RECIPE + "(" + STEP_TO_RECIPE_ID + " INTEGER PRIMARY KEY," + RECIPE_ID
+            + TABLE_STEP_TO_RECIPE + "(" + STEP_TO_RECIPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + RECIPE_ID
             + " INTEGER," + RECIPE_STEP_ID + " INTEGER" + ")";
 
 
@@ -174,5 +178,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         onCreate(sqLiteDatabase);
 
+    }
+
+    /*
+     * Creating a user
+     */
+    public long createUser(User user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(USERNAME, user.username);
+        values.put(PASSWORD, user.password);
+
+        // insert row
+        long user_id = db.insert(TABLE_USER, null, values);
+
+        return user_id;
+    }
+
+    /*
+     * get gets a user by their username and password
+     */
+    public int getUser(String username, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_USER + " WHERE "
+                + USERNAME + " LIKE '" + username + "' AND " + PASSWORD + " LIKE '" + password + "'";
+
+        //String selectQuery = "SELECT  * FROM " + TABLE_USER;
+
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        int a = -1;
+        if (c != null){
+            c.moveToFirst();
+            a = c.getInt(c.getColumnIndex(USER_ID));
+        }
+
+        return a;
     }
 }
