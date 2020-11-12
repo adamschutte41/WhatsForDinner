@@ -25,7 +25,10 @@ public class LoginActivity extends AppCompatActivity {
         String userIn = username.getText().toString();
         String passIn = password.getText().toString();
 
-        user = User.getInstance(userIn, passIn, getApplicationContext());
+        user = User.getInstance();
+        user.setUsername(userIn);
+        user.setPassword(passIn);
+        user.setContext(getApplicationContext());
         long result = user.getUser(userIn, passIn);
 
         if(result != -1){
@@ -41,7 +44,10 @@ public class LoginActivity extends AppCompatActivity {
         String userIn = newUsername.getText().toString();
         String passIn = newPassword.getText().toString();
 
-        user = User.getInstance(userIn, passIn, getApplicationContext());
+        user = User.getInstance();
+        user.setUsername(userIn);
+        user.setPassword(passIn);
+        user.setContext(getApplicationContext());
         long result = user.createUser();
 
         if(result != -1){
