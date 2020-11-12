@@ -84,8 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_USER = "CREATE TABLE "
             + TABLE_USER + "(" + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + USERNAME
-            + " TEXT," + PASSWORD + " TEXT," + LOCATION
-            + " TEXT" + ")";
+            + " TEXT," + PASSWORD + " TEXT," + LOCATION + " TEXT" + ")";
 
     private static final String CREATE_TABLE_RESTAURANT = "CREATE TABLE "
             + TABLE_RESTAURANT + "(" + RESTAURANT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + NAME
@@ -211,7 +210,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(selectQuery, null);
 
         int a = -1;
-        if (c != null){
+        if (c.getCount() != 0){
             c.moveToFirst();
             a = c.getInt(c.getColumnIndex(USER_ID));
         }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate() called");
 
+        DatabaseHelper db = DatabaseHelper.getInstance(getApplicationContext());
+
+        TextView username = findViewById(R.id.username);
+        username.setText("test");;
         Button eatOutBtn = findViewById(R.id.eatOutBtn);
         Button stayInBtn = findViewById(R.id.stayInBtn);
 

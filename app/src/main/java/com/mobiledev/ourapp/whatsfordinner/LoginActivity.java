@@ -59,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
         Button loginBtn = findViewById(R.id.loginBtn);
         Button createAccountBtn = findViewById(R.id.createAccountBtn);
         login = findViewById(R.id.LoginTextView);
@@ -69,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
 
         newUsername = findViewById(R.id.newUsername);
         newPassword = findViewById(R.id.newPassword);
+
 
     }
 }
