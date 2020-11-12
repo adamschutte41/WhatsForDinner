@@ -13,6 +13,7 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -54,6 +56,7 @@ public class RecipeSearchResultsFragment extends Fragment implements ListView.On
     private String[] parsed_ingredients;
     private JSONObject json_request;
     private RecipeObject[] recipes;
+    private String TAG = "RecipeSearchResultsFragment";
 
     @Nullable
     @Override
@@ -108,7 +111,9 @@ public class RecipeSearchResultsFragment extends Fragment implements ListView.On
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                list.add(new SubjectData("Uh oh!", null, null));
+                Toast.makeText(getActivity(), "Search Returned No Results", Toast.LENGTH_SHORT);
+                json_request = null;
+                ParseResponse();
             }
         });
         requestQueue.add(jsonObjectRequest);
@@ -126,7 +131,11 @@ public class RecipeSearchResultsFragment extends Fragment implements ListView.On
                 list.add(new SubjectData(recipe.getLabel(), recipe.getUrl(), recipe.getImage()));
             }
         }catch(Exception e){
-            list.add(new SubjectData("Uh oh!", null, null));
+            Toast.makeText(getActivity(), "Search Returned no results", Toast.LENGTH_SHORT);
+        }
+        if(list.size() < 1){
+            Toast.makeText(getActivity().getApplicationContext(), "Search Returned no results", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity().getApplicationContext(), RecipeSearchActivity.class));
         }
 
         mRecipeListView.setAdapter(customAdapter);

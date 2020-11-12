@@ -68,7 +68,7 @@ class CustomAdapter implements ListAdapter {
     }
     @Override
     public int getViewTypeCount() {
-        return arrayList.size();
+        return arrayList.size() + 1;
     }
     @Override
     public boolean isEmpty() {
