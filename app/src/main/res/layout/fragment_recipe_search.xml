@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/TextView"
+        android:id="@+id/response_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -34,7 +34,8 @@
         android:ems="10"
         android:hint="@string/ingredient_name"
         android:gravity="start|top"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:maxLines="10" />
 
     <Button
         android:id="@+id/search_button"

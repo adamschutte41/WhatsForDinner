@@ -1,19 +1,22 @@
 package com.mobiledev.ourapp.whatsfordinner;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.ArrayList;
 
 /**
  * A fragment class for the recipe search
@@ -21,8 +24,8 @@ import java.util.ArrayList;
  */
 public class RecipeSearchFragment extends Fragment implements View.OnClickListener{
     private EditText mIngredients;
-    private int IngredientListSize = 1;
-
+    private String TAG = "RecipeSearchFragment";
+    private String[] parsed_ingredients;
 
     @Nullable
     @Override
@@ -38,13 +41,32 @@ public class RecipeSearchFragment extends Fragment implements View.OnClickListen
         }
 
         mIngredients = v.findViewById(R.id.edit_ingredient_name);
-
         Button searchButton = v.findViewById(R.id.search_button);
         if(searchButton != null){
             searchButton.setOnClickListener(this);
         }
 
+        parsed_ingredients = new String[10];
+
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        parsed_ingredients = new String[10];
+        super.onResume();
+        try{
+            AppCompatActivity activity = (AppCompatActivity) getActivity();
+            if(activity != null){
+                ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+                if(actionBar != null){
+                    actionBar.setSubtitle("Recipe Search");
+                }
+            }
+        }
+        catch (NullPointerException npe){
+            Log.d(TAG, "Could not set subtitle");
+        }
     }
 
     @Override
@@ -53,27 +75,35 @@ public class RecipeSearchFragment extends Fragment implements View.OnClickListen
         if(activity != null){
             switch (view.getId()){
                 case R.id.search_button:
-                    searchIngredients();
+                    ParseIngredients(view);
                     break;
             }
         }
     }
-    public void searchIngredients(){
-        String[] parsed_ingredients = new String[10];
+
+    public void ParseIngredients(View view){
         String ingredients = mIngredients.getText().toString();
         int count = 0;
+        parsed_ingredients[0] = "";
         for(int i = 0; i < ingredients.length(); i++){
             char c = ingredients.charAt(i);
-            if(c != '\n' && c != ','){
-                parsed_ingredients[count] += c;
+            if(c == '\n' || c == ','){
+                if(i < ingredients.length()-1) {
+                    char c_next = ingredients.charAt(i + 1);
+                    if (c_next == ' ' || c_next == '\n') {
+                        i++;
+                    }
+                    count++;
+                    parsed_ingredients[count] = "";
+                }
             }
             else{
-                char c_next = ingredients.charAt(i);
-                if(c_next == ' ' || c_next == '\n'){
-                    i++;
-                }
-                count++;
+                parsed_ingredients[count] += c;
             }
         }
+        Intent i = new Intent(getActivity().getApplicationContext(), RecipeSearchResultsActivity.class);
+        i.putExtra("KEY", parsed_ingredients);
+        startActivity(i);
     }
+
 }

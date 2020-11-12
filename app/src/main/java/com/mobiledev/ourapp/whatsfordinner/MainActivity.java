@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         stayInBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, RecipeSearchActivity.class));
+                startActivity(new Intent(MainActivity.this.getApplicationContext(), RecipeSearchActivity.class));
             }
         });
 
