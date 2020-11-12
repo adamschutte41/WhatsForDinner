@@ -10,20 +10,32 @@ public class User {
     String password;
     DatabaseHelper db;
 
-    public static synchronized User getInstance(String username, String password, Context context) {
+    public static synchronized User getInstance() {
 
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx
         if (user == null) {
-            user = new User(username, password, context);
+            user = new User();
         }
         return user;
     }
 
-    private User(String username, String password, Context context) {
+    private User() {
+
+
+
+    }
+
+    public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setContext(Context context){
         db = DatabaseHelper.getInstance(context);
     }
 

@@ -54,13 +54,35 @@ public class RestaurantViewActivity extends AppCompatActivity{
 
     }
 
+    public void saveFavoriteRestaurant(String tag){
+        long id = -1;
+
+        for (Restaurant r : adapter.list) {
+            if(r.name.equals(tag)){
+                id = db.saveFavoriteRestaurant(r.name, r.location);
+                break;
+            }
+        }
+
+        Context c = getApplicationContext();
+        if(id == -2){
+            Toast.makeText(getApplicationContext(), "Restaurant already saved", Toast.LENGTH_LONG).show();
+        }else if(id != -1){
+            Toast.makeText(getApplicationContext(), "Saved to favorites", Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(getApplicationContext(), "ERROR saving restaurant", Toast.LENGTH_LONG).show();
+        }
+    }
+
     private class RestaurantAdapter extends ArrayAdapter<Restaurant> implements View.OnClickListener {
 
         private ArrayList<Restaurant> list;
+        Context mContext;
 
         public RestaurantAdapter(Context context, int textViewResourceId,
                                ArrayList<Restaurant> list) {
             super(context, textViewResourceId, list);
+            this.mContext = context;
             this.list = new ArrayList<Restaurant>();
             this.list.addAll(list);
             db = DatabaseHelper.getInstance(getApplicationContext());
@@ -69,6 +91,9 @@ public class RestaurantViewActivity extends AppCompatActivity{
         @Override
         public void onClick(View view) {
             String tag = (String) view.getTag();
+            if (mContext instanceof RestaurantViewActivity) {
+                ((RestaurantViewActivity)mContext).saveFavoriteRestaurant(tag);
+            }
         }
 
         private class ViewHolder {

@@ -3,6 +3,7 @@ package com.mobiledev.ourapp.whatsfordinner;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -197,6 +198,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /*
+     * Creating a restaurant
+     */
+    public long createRestaurant(String name, String location) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String newname = name.replaceAll("'","");
+
+        ContentValues values = new ContentValues();
+        values.put(NAME, newname);
+        values.put(LOCATION, location);
+
+        // insert row
+        long rest_id = db.insert(TABLE_RESTAURANT, null, values);
+
+        return rest_id;
+    }
+
+    /*
+     * Creating a user
+     */
+    public long createFavoriteRestaurant(int rest_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        User u = User.getInstance();
+
+        //link user to restaurant id
+        ContentValues values = new ContentValues();
+        values.put(USER_ID, u.id);
+        values.put(RESTAURANT_ID, rest_id);
+
+        // insert row
+        long fav_id = db.insert(TABLE_FAVORITE_RESTAURANT, null, values);
+
+        return fav_id;
+    }
+
+    /*
      * get gets a user by their username and password
      */
     public int getUser(String username, String password) {
@@ -212,10 +250,103 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int a = -1;
         if (c != null){
-            c.moveToFirst();
-            a = c.getInt(c.getColumnIndex(USER_ID));
+
+            if(c.getCount() != 0){
+                c.moveToFirst();
+                a = c.getInt(c.getColumnIndex(USER_ID));
+            }
+
         }
 
         return a;
+    }
+
+    /*
+     * get gets a user by their username and password
+     */
+    public int getRestaurant(String name, String location) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String newname = name.replaceAll("'","");
+
+        String selectQuery = "SELECT  * FROM " + TABLE_RESTAURANT + " WHERE "
+                + NAME + " LIKE '" + newname + "' AND " + LOCATION + " LIKE '" + location + "'";
+
+        //String selectQuery = "SELECT  * FROM " + TABLE_USER;
+
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        int a = -1;
+
+        if (c != null){
+            if(c.getCount() != 0){
+                c.moveToFirst();
+                a = c.getInt(c.getColumnIndex(RESTAURANT_ID));
+            }
+
+        }
+
+        return a;
+    }
+
+    public int getFavoriteRestaurant(int rest_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        User u = User.getInstance();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_FAVORITE_RESTAURANT + " WHERE "
+                + USER_ID + " = '" + u.id + "' AND " + RESTAURANT_ID + " = '" + rest_id + "'";
+
+        //String selectQuery = "SELECT  * FROM " + TABLE_USER;
+
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        int a = -1;
+
+        if (c != null){
+            if(c.getCount() != 0){
+                c.moveToFirst();
+                a = c.getInt(c.getColumnIndex(FAVORITE_RESTAURANT_ID));
+            }
+
+        }
+
+        return a;
+    }
+
+    public long saveFavoriteRestaurant(String name, String location){
+        long fav_id = -1;
+        SQLiteDatabase db = this.getWritableDatabase();
+        //see if restaurant already exists in db
+        int rest_id = getRestaurant(name, location);
+
+        //yes - get id and link to user id
+        if(rest_id != -1){
+
+            int savedBefore = getFavoriteRestaurant(rest_id);
+
+            if(savedBefore != -1){
+                fav_id = -2;
+            } else {
+                // insert row
+                fav_id = createFavoriteRestaurant(rest_id);
+            }
+
+
+        } else {
+            //no - add restaurant to db and link to user
+            long id = createRestaurant(name, location);
+
+            rest_id = Math.round(id);
+
+            fav_id = createFavoriteRestaurant(rest_id);
+
+        }
+
+
+
+        return fav_id;
     }
 }

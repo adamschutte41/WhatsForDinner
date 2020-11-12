@@ -110,7 +110,7 @@ public class RestaurantSearchActivity extends AppCompatActivity implements View.
         String lat = "lat=" + latitude;
         String lon = "&lon=" + longitude;
         String radius = "&radius=40000";
-        String cuisines = "&cuisines=" + categories.toString();
+        String cuisines = "&cuisines=" + categories.get(0).toString();
         String url = base + lat + lon + radius + cuisines;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
