@@ -18,8 +18,16 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        Button favoritesBtn = findViewById(R.id.favoritesBtn);
+        Button favoritesBtn = findViewById(R.id.favoriteRecBtn);
         favoritesBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+            }
+        });
+
+        Button favoriteRestBtn = findViewById(R.id.favoriteRestBtn);
+        favoriteRestBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SettingsActivity.this, MainActivity.class));
