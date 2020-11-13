@@ -5,17 +5,29 @@ import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
-class CustomAdapter implements ListAdapter {
+import java.util.EventListener;
+
+class CustomAdapter implements ListAdapter, View.OnClickListener {
     ArrayList<SubjectData> arrayList;
     Context context;
-    public CustomAdapter(Context context, ArrayList<SubjectData> arrayList) {
+    Button saveFavorite;
+    EventListener eventListener;
+    SubjectData subjectData;
+
+    public interface EventListener {
+        void onEvent(String name);
+    }
+
+    public CustomAdapter(Context context, ArrayList<SubjectData> arrayList, EventListener listener) {
         this.arrayList=arrayList;
         this.context=context;
+        this.eventListener = listener;
     }
     @Override
     public boolean areAllItemsEnabled() {
@@ -49,13 +61,17 @@ class CustomAdapter implements ListAdapter {
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        SubjectData subjectData = arrayList.get(position);
+        subjectData = arrayList.get(position);
         if(convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             convertView = layoutInflater.inflate(R.layout.list_item_recipe, null);
             TextView tittle = convertView.findViewById(R.id.title);
             ImageView imag = convertView.findViewById(R.id.list_image);
             tittle.setText(subjectData.SubjectName);
+            saveFavorite = convertView.findViewById(R.id.saveFavoriteRecipe);
+            saveFavorite.setTag(subjectData.SubjectName);
+            saveFavorite.setOnClickListener(this);
+            convertView.setTag(tittle);
             Picasso.with(context)
                     .load(subjectData.Image)
                     .into(imag);
@@ -73,5 +89,11 @@ class CustomAdapter implements ListAdapter {
     @Override
     public boolean isEmpty() {
         return false;
+    }
+
+    @Override
+    public void onClick(View view) {
+        String tag = (String) view.getTag();
+        eventListener.onEvent(tag);
     }
 }
