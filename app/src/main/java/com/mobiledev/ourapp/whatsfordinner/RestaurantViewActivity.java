@@ -3,6 +3,7 @@ package com.mobiledev.ourapp.whatsfordinner;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class RestaurantViewActivity extends AppCompatActivity{
+public class RestaurantViewActivity extends AppCompatActivity implements View.OnClickListener{
 
     RestaurantAdapter adapter;
     DatabaseHelper db;
@@ -29,7 +30,8 @@ public class RestaurantViewActivity extends AppCompatActivity{
         setContentView(R.layout.activity_restaurant_view);
 
         ListView resListView = findViewById(R.id.resListView);
-
+        Button backBtn = findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(this);
 
         ArrayList<Restaurant> results = new ArrayList<>();
 
@@ -71,6 +73,15 @@ public class RestaurantViewActivity extends AppCompatActivity{
             Toast.makeText(getApplicationContext(), "Saved to favorites", Toast.LENGTH_LONG).show();
         }else {
             Toast.makeText(getApplicationContext(), "ERROR saving restaurant", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.backBtn:
+                startActivity(new Intent(RestaurantViewActivity.this, MainActivity.class));
+                break;
         }
     }
 

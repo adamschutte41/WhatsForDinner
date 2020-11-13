@@ -1,6 +1,7 @@
 package com.mobiledev.ourapp.whatsfordinner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -45,7 +47,7 @@ import java.util.ArrayList;
 /**
  *
  */
-public class RecipeSearchResultsFragment extends Fragment implements ListView.OnItemClickListener{
+public class RecipeSearchResultsFragment extends Fragment implements View.OnClickListener, ListView.OnItemClickListener, CustomAdapter.EventListener{
     private ListView mRecipeListView;
     private ArrayList<SubjectData> list = new ArrayList<>();
     private CustomAdapter customAdapter;
@@ -54,6 +56,7 @@ public class RecipeSearchResultsFragment extends Fragment implements ListView.On
     private String[] parsed_ingredients;
     private JSONObject json_request;
     private RecipeObject[] recipes;
+    DatabaseHelper db;
 
     @Nullable
     @Override
@@ -70,9 +73,12 @@ public class RecipeSearchResultsFragment extends Fragment implements ListView.On
         else{
             v = inflater.inflate(R.layout.fragment_recipe_search_results, container, false);
         }
+        Button backBtn = v.findViewById(R.id.backbtn);
+        backBtn.setOnClickListener(this);
+        db = DatabaseHelper.getInstance(getContext());
         mRecipeListView = v.findViewById(R.id.list);
 
-        customAdapter = new CustomAdapter(getActivity(), list);
+        customAdapter = new CustomAdapter(getActivity(), list, RecipeSearchResultsFragment.this);
 
         return v;
     }
@@ -141,5 +147,38 @@ public class RecipeSearchResultsFragment extends Fragment implements ListView.On
         intent.setData(Uri.parse(url));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+
+    public void onEvent(String name) {
+        long id = -1;
+
+        for(RecipeObject r : recipes){
+            if(r.getLabel().equals(name)){
+                id = db.saveFavoriteRecipe(name, r.getUrl(), r.getImage());
+                break;
+            }
+        }
+
+        Context c = getContext();
+        if(id == -2){
+            Toast.makeText(getActivity(), "Recipe already saved", Toast.LENGTH_LONG).show();
+        }else if(id != -1){
+            Toast.makeText(getActivity(), "Saved to favorites", Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(getActivity(), "ERROR saving recipe", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        Activity activity = getActivity();
+        if(activity != null){
+            switch (view.getId()){
+                case R.id.backbtn:
+                    startActivity(new Intent(activity, MainActivity.class));
+                    break;
+            }
+        }
     }
 }

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "WhatsForDinner";
@@ -60,6 +60,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // recipe column names
     private static final String RECIPE_ID = "recipe_id";
+    private static final String U = "u";
+    private static final String I = "i";
     // table also includes name from multi use
     // table also includes type from multi use
 
@@ -101,7 +103,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_RECIPE = "CREATE TABLE "
             + TABLE_RECIPE + "(" + RECIPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + NAME
-            + " TEXT," + TYPE + " TEXT" + ")";
+            + " TEXT," + U + " TEXT," + I
+            + " TEXT" + ")";
 
     private static final String CREATE_TABLE_INGREDIENT = "CREATE TABLE "
             + TABLE_INGREDIENT + "(" + INGREDIENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + NAME
@@ -216,8 +219,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /*
-     * Creating a user
+     * Creating a recipe
      */
+    public long createRecipe(String name, String url, String image) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String newname = name.replaceAll("'","");
+        String newUrl = url.replaceAll("/", "");
+        newUrl = newUrl.replaceAll(":", "");
+        newUrl = newUrl.replaceAll("-", "");
+        newUrl = newUrl.replaceAll("\\.", "");
+
+        ContentValues values = new ContentValues();
+        values.put(NAME, newname);
+        values.put(U, url);
+        values.put(I, image);
+
+        // insert row
+        long rest_id = db.insert(TABLE_RECIPE, null, values);
+
+        return rest_id;
+    }
+
     public long createFavoriteRestaurant(int rest_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -230,6 +253,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // insert row
         long fav_id = db.insert(TABLE_FAVORITE_RESTAURANT, null, values);
+
+        return fav_id;
+    }
+
+    public long createFavoriteRecipe(int rest_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        User u = User.getInstance();
+
+        //link user to restaurant id
+        ContentValues values = new ContentValues();
+        values.put(USER_ID, u.id);
+        values.put(RECIPE_ID, rest_id);
+
+        // insert row
+        long fav_id = db.insert(TABLE_FAVORITE_RECIPES, null, values);
 
         return fav_id;
     }
@@ -290,6 +329,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return a;
     }
 
+    /*
+     * get gets a user by their username and password
+     */
+    public int getRecipe(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String newname = name.replaceAll("'","");
+
+        String selectQuery = "SELECT  * FROM " + TABLE_RECIPE + " WHERE "
+                + NAME + " LIKE '" + newname + "'";
+
+        //String selectQuery = "SELECT  * FROM " + TABLE_USER;
+
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        int a = -1;
+
+        if (c != null){
+            if(c.getCount() != 0){
+                c.moveToFirst();
+                a = c.getInt(c.getColumnIndex(RECIPE_ID));
+            }
+
+        }
+
+        return a;
+    }
+
     public int getFavoriteRestaurant(int rest_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -309,6 +377,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if(c.getCount() != 0){
                 c.moveToFirst();
                 a = c.getInt(c.getColumnIndex(FAVORITE_RESTAURANT_ID));
+            }
+
+        }
+
+        return a;
+    }
+
+    public int getFavoriteRecipe(int rest_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        User u = User.getInstance();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_FAVORITE_RECIPES + " WHERE "
+                + USER_ID + " = '" + u.id + "' AND " + RECIPE_ID + " = '" + rest_id + "'";
+
+        //String selectQuery = "SELECT  * FROM " + TABLE_USER;
+
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        int a = -1;
+
+        if (c != null){
+            if(c.getCount() != 0){
+                c.moveToFirst();
+                a = c.getInt(c.getColumnIndex(FAVORITE_RECIPE_ID));
             }
 
         }
@@ -342,6 +436,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             rest_id = Math.round(id);
 
             fav_id = createFavoriteRestaurant(rest_id);
+
+        }
+
+
+
+        return fav_id;
+    }
+
+    public long saveFavoriteRecipe(String name, String url, String image){
+        long fav_id = -1;
+        SQLiteDatabase db = this.getWritableDatabase();
+        //see if restaurant already exists in db
+        int rest_id = getRecipe(name);
+
+        //yes - get id and link to user id
+        if(rest_id != -1){
+
+            int savedBefore = getFavoriteRecipe(rest_id);
+
+            if(savedBefore != -1){
+                fav_id = -2;
+            } else {
+                // insert row
+                fav_id = createFavoriteRecipe(rest_id);
+            }
+
+
+        } else {
+            //no - add restaurant to db and link to user
+            long id = createRecipe(name, url, image);
+
+            rest_id = Math.round(id);
+
+            fav_id = createFavoriteRecipe(rest_id);
 
         }
 
