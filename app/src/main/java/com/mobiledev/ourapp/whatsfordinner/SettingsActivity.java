@@ -41,5 +41,13 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(new Intent(SettingsActivity.this, LoginSettingsActivity.class));
             }
         });
+
+        Button back = findViewById(R.id.backBtn);
+        accountBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+            }
+        });
     }
 }

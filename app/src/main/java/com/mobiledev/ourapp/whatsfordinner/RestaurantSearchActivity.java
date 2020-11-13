@@ -142,7 +142,7 @@ public class RestaurantSearchActivity extends AppCompatActivity implements View.
                 }
 
                 //now handle the response
-                Toast.makeText(getApplicationContext(), "HOLY SHIT!!!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "HOLY SHIT!!!", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(RestaurantSearchActivity.this, RestaurantViewActivity.class);
                 //i.putExtra("EXTRA_RESTAURANTS", results);
                 i.putExtra("restaurants", results);
@@ -290,10 +290,10 @@ public class RestaurantSearchActivity extends AppCompatActivity implements View.
                         Context c = v.getContext();
                         CheckBox cb = (CheckBox) v ;
                         Restaurant restaurant = (Restaurant) cb.getTag();
-                        Toast.makeText(c.getApplicationContext(),
-                                "Clicked on Checkbox: " + cb.getText() +
-                                        " is " + cb.isChecked(),
-                                Toast.LENGTH_LONG).show();
+//                        Toast.makeText(c.getApplicationContext(),
+//                                "Clicked on Checkbox: " + cb.getText() +
+//                                        " is " + cb.isChecked(),
+//                                Toast.LENGTH_LONG).show();
                         restaurant.setSelected(cb.isChecked());
                     }
                 });

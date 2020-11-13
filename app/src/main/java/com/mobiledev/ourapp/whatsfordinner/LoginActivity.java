@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         long result = user.createUser();
 
         if(result != -1){
-            Toast.makeText(getApplicationContext(), "WE CAN VIBE", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(), "WE CAN VIBE", Toast.LENGTH_LONG).show();
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }else {
             Toast.makeText(getApplicationContext(), "LOGIN ERROR", Toast.LENGTH_LONG).show();
