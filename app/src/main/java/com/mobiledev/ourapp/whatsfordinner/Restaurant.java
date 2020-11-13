@@ -22,6 +22,11 @@ public class Restaurant {
         this.menu = menu;
     }
 
+    public Restaurant(String name, String location){
+        this.name = name;
+        this.location = location;
+    }
+
     public void setSelected(boolean selected){
         this.isSelected = selected;
     }

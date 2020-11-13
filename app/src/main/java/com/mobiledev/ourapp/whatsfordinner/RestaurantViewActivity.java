@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +28,7 @@ public class RestaurantViewActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_view);
 
-        ListView resListView = findViewById(R.id.resListView);
+        ListView resListView = findViewById(R.id.favListView);
         Button backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(this);
 
