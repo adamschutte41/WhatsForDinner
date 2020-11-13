@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button eatOutBtn = findViewById(R.id.eatOutBtn);
         Button stayInBtn = findViewById(R.id.stayInBtn);
+        Button settingsBtn = findViewById(R.id.settingsBtn);
 
         stayInBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -34,6 +35,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, RestaurantSearchActivity.class));
             }
         });
+
+        settingsBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+        });
+
     }
 
     @Override

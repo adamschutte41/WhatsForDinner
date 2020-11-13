@@ -234,6 +234,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return fav_id;
     }
 
+    public void editUser(String username, String password, String newUsername, String newPassword){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String updateQuery = "UPDATE " + TABLE_USER + " SET " + USERNAME + " = " +"'"+newUsername+"' "+  ", " +
+                PASSWORD + " = " + "'"+newPassword+"'" + " WHERE " + USERNAME + " LIKE '" + username +
+                "' AND " + PASSWORD + " LIKE '" + password + "'";
+
+        db.execSQL(updateQuery);
+
+    }
+
     /*
      * get gets a user by their username and password
      */

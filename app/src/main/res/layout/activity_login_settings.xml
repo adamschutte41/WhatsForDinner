@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".LoginSettingsActivity">
 
     <EditText
         android:id="@+id/username"
@@ -13,11 +13,11 @@
         android:layout_marginTop="30dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="Old Username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LoginTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/submitTextView" />
 
     <EditText
         android:id="@+id/password"
@@ -26,17 +26,18 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPassword"
+        android:hint="Old Password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username" />
 
     <TextView
-        android:id="@+id/LoginTextView"
+        android:id="@+id/submitTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Log In"
+        android:text="Change Password/Username"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -44,17 +45,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <TextView
-        android:id="@+id/createAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:text="Create Account"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
     <EditText
         android:id="@+id/newUsername"
@@ -63,11 +53,11 @@
         android:layout_marginTop="30dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="New Username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createAccount" />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <EditText
         android:id="@+id/newPassword"
@@ -75,6 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:ems="10"
+        android:hint="New Password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -82,23 +73,12 @@
         app:layout_constraintTop_toBottomOf="@+id/newUsername" />
 
     <Button
-        android:id="@+id/loginBtn"
+        android:id="@+id/submitBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:onClick="onLogin"
-        android:text="Log In"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
-    <Button
-        android:id="@+id/createAccountBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:onClick="onCreateAccount"
-        android:text="Create Account"
+        android:onClick="onSubmit"
+        android:text="Submit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
