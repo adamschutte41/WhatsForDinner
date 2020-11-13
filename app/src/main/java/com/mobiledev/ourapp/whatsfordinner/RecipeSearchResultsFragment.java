@@ -14,6 +14,7 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
     private JSONObject json_request;
     private RecipeObject[] recipes;
     DatabaseHelper db;
+    private String TAG = "RecipeSearchResultsFragment";
 
     @Nullable
     @Override
@@ -114,7 +116,9 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                list.add(new SubjectData("Uh oh!", null, null));
+                Toast.makeText(getActivity(), "Search Returned No Results", Toast.LENGTH_SHORT);
+                json_request = null;
+                ParseResponse();
             }
         });
         requestQueue.add(jsonObjectRequest);
@@ -132,7 +136,11 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
                 list.add(new SubjectData(recipe.getLabel(), recipe.getUrl(), recipe.getImage()));
             }
         }catch(Exception e){
-            list.add(new SubjectData("Uh oh!", null, null));
+            Toast.makeText(getActivity(), "Search Returned no results", Toast.LENGTH_SHORT);
+        }
+        if(list.size() < 1){
+            Toast.makeText(getActivity().getApplicationContext(), "Search Returned no results", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity().getApplicationContext(), RecipeSearchActivity.class));
         }
 
         mRecipeListView.setAdapter(customAdapter);

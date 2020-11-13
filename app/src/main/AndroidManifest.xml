@@ -27,6 +27,10 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".RestaurantViewActivity" />
         <activity android:name=".RestaurantSearchActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".LoginSettingsActivity" />
+        <activity android:name=".FavRecipesActivity" />
+        <activity android:name=".FavRestaurantsActivity" />
     </application>
 
 </manifest>

@@ -84,7 +84,7 @@ class CustomAdapter implements ListAdapter, View.OnClickListener {
     }
     @Override
     public int getViewTypeCount() {
-        return arrayList.size();
+        return arrayList.size() + 1;
     }
     @Override
     public boolean isEmpty() {

@@ -50,4 +50,8 @@ public class User {
 
         return l;
     }
+
+    public void editUser(String username, String password, String newUsername, String newPassword){
+        db.editUser(username, password, newUsername, newPassword);
+    }
 }
