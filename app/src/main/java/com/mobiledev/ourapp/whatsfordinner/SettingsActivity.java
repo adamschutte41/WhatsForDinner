@@ -22,7 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
         favoritesBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SettingsActivity.this, FavRecipesActivity.class));
+                startActivity(new Intent(SettingsActivity.this, FavoriteRecipeActivity.class));
             }
         });
 
@@ -30,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
         favoriteRestBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+                startActivity(new Intent(SettingsActivity.this, FavoriteRestaurantActivity.class));
             }
         });
 

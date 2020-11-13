@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,6 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".FavoriteRecipeActivity"></activity>
+        <activity android:name=".FavoriteRestaurantActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +24,7 @@
         <activity
             android:name=".RecipeSearchResultsActivity"
             android:label="@string/title_activity_recipe_search_results"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SingleFragmentActivity" />
         <activity android:name=".RecipeSearchActivity" />
         <activity android:name=".MainActivity" />
@@ -29,8 +32,6 @@
         <activity android:name=".RestaurantSearchActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".LoginSettingsActivity" />
-        <activity android:name=".FavRecipesActivity" />
-        <activity android:name=".FavRestaurantsActivity" />
     </application>
 
 </manifest>

@@ -14,6 +14,14 @@ public class RecipeObject {
         image = jsonObject.getString("image");
     }
 
+    public RecipeObject(String label, String url, String image)  {
+        this.url = url;
+        this.label = label;
+        this.image = image;
+    }
+
+
+
     public String getLabel() {
         return label;
     }

@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LoginSettingsActivity extends AppCompatActivity {
+public class LoginSettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     User user;
     EditText username;
@@ -58,5 +58,17 @@ public class LoginSettingsActivity extends AppCompatActivity {
         newUsername = findViewById(R.id.newUsername);
         newPassword = findViewById(R.id.newPassword);
 
+        Button backBtn = findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.backBtn:
+                startActivity(new Intent(LoginSettingsActivity.this, SettingsActivity.class));
+                break;
+        }
     }
 }

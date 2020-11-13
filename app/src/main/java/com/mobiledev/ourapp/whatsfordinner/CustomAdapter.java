@@ -11,7 +11,6 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
-import java.util.EventListener;
 
 class CustomAdapter implements ListAdapter, View.OnClickListener {
     ArrayList<SubjectData> arrayList;
@@ -68,7 +67,7 @@ class CustomAdapter implements ListAdapter, View.OnClickListener {
             TextView tittle = convertView.findViewById(R.id.title);
             ImageView imag = convertView.findViewById(R.id.list_image);
             tittle.setText(subjectData.SubjectName);
-            saveFavorite = convertView.findViewById(R.id.saveFavoriteRecipe);
+            saveFavorite = convertView.findViewById(R.id.deleteFavoriteRecipe);
             saveFavorite.setTag(subjectData.SubjectName);
             saveFavorite.setOnClickListener(this);
             convertView.setTag(tittle);

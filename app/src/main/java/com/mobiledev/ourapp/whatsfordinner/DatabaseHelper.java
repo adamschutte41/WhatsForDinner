@@ -342,6 +342,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
      * get gets a user by their username and password
      */
+    public String[] getRestaurantById(int rest_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String [] result = new String[2];
+
+        String selectQuery = "SELECT  * FROM " + TABLE_RESTAURANT + " WHERE "
+                + RESTAURANT_ID + " = " + rest_id;
+
+        //String selectQuery = "SELECT  * FROM " + TABLE_USER;
+
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        int a = -1;
+
+        if (c != null){
+            if(c.getCount() != 0){
+                c.moveToFirst();
+                result[0] = c.getString(c.getColumnIndex(NAME));
+                result[1] = c.getString(c.getColumnIndex(LOCATION));
+            }
+
+        }
+
+        return result;
+    }
+
+    /*
+     * get gets a user by their username and password
+     */
+    public String[] getRecipesById(int rest_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String [] result = new String[3];
+
+        String selectQuery = "SELECT  * FROM " + TABLE_RECIPE + " WHERE "
+                + RECIPE_ID + " = " + rest_id;
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        int a = -1;
+
+        if (c != null){
+            if(c.getCount() != 0){
+                c.moveToFirst();
+                result[0] = c.getString(c.getColumnIndex(NAME));
+                result[1] = c.getString(c.getColumnIndex(U));
+                result[2] = c.getString(c.getColumnIndex(I));
+            }
+
+        }
+
+        return result;
+    }
+
+    /*
+     * get gets a user by their username and password
+     */
     public int getRecipe(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -483,8 +541,119 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         }
 
-
-
         return fav_id;
+    }
+
+
+    public ArrayList<RecipeObject> getFavoriteRecipes(){
+        ArrayList<RecipeObject> recipes = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        User u = User.getInstance();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_FAVORITE_RECIPES + " WHERE "
+                + USER_ID + " = '" + u.id + "'";
+
+        //String selectQuery = "SELECT  * FROM " + TABLE_USER;
+
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        int a = -1;
+
+        if (c != null){
+            if(c.getCount() != 0){
+                int i = 0;
+                c.moveToFirst();
+                while (i < c.getCount()){
+                    a = c.getInt(c.getColumnIndex(RECIPE_ID));
+                    if(a > 0){
+                        //we have a recipe, need to get its info
+                        String [] info = new String[3];
+                        info = getRecipesById(a);
+                        RecipeObject r = new RecipeObject(info[0], info[1], info[2]);
+                        recipes.add(r);
+                    }
+                    c.moveToNext();
+                    i++;
+                }
+
+            }
+
+        }
+
+        return recipes;
+    }
+
+    public ArrayList<Restaurant> getFavoriteRestaurants(){
+        ArrayList<Restaurant> restaurants = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        User u = User.getInstance();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_FAVORITE_RESTAURANT + " WHERE "
+                + USER_ID + " = '" + u.id + "'";
+
+        //String selectQuery = "SELECT  * FROM " + TABLE_USER;
+
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        int a = -1;
+
+        if (c != null){
+            if(c.getCount() != 0){
+                int i = 0;
+                c.moveToFirst();
+                while (i < c.getCount()){
+                    a = c.getInt(c.getColumnIndex(RESTAURANT_ID));
+                    if(a > 0){
+                        //we have a restaurant, need to get its info
+                        String [] info = new String[2];
+                        info = getRestaurantById(a);
+                        Restaurant r = new Restaurant(info[0], info[1]);
+                        restaurants.add(r);
+                    }
+                    c.moveToNext();
+                    i++;
+                }
+
+            }
+
+        }
+
+        return restaurants;
+    }
+
+    public void deleteFavoriteRestaurant(String name, String location){
+        long fav_id = -1;
+        SQLiteDatabase db = this.getWritableDatabase();
+        //see if restaurant already exists in db
+        int rest_id = getRestaurant(name, location);
+
+        int id = getFavoriteRestaurant(rest_id);
+
+        if(id != -1){
+            db.delete(TABLE_FAVORITE_RESTAURANT, FAVORITE_RESTAURANT_ID + " = ?",
+                    new String[] { String.valueOf(id) });
+        }
+
+    }
+
+    public void deleteFavoriteRecipe(String name){
+        long fav_id = -1;
+        SQLiteDatabase db = this.getWritableDatabase();
+        //see if restaurant already exists in db
+        int rest_id = getRecipe(name);
+
+        int id = getFavoriteRecipe(rest_id);
+
+        if(id != -1){
+            db.delete(TABLE_FAVORITE_RECIPES, FAVORITE_RECIPE_ID + " = ?",
+                    new String[] { String.valueOf(id) });
+        }
+
     }
 }
