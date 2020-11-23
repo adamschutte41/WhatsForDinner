@@ -81,7 +81,7 @@ public class RestaurantSearchActivity extends AppCompatActivity implements View.
 
     public void processSelectedRestaurants(){
         //default values for if nothing was selected
-        ArrayList<Integer> categories = new ArrayList<Integer>();
+        final ArrayList<Integer> categories = new ArrayList<Integer>();
         ArrayList<Integer> prices = new ArrayList<Integer>();
         prices.add(1);
         int maxPrice = 1;
@@ -103,71 +103,87 @@ public class RestaurantSearchActivity extends AppCompatActivity implements View.
 
         }
 
-        //StringRequest stringRequest = searchRestaurantRequest(categories, prices);
-        //queue.add(stringRequest);
-        //String url ="https://developers.zomato.com/api/v2.1/search?lat=39.992981666666665&lon=-83.00122&radius=40000&cuisines=american";
-        String base = "https://developers.zomato.com/api/v2.1/search?";
-        String lat = "lat=" + latitude;
-        String lon = "&lon=" + longitude;
-        String radius = "&radius=40000";
-        String cuisines = "&cuisines=" + categories.get(0).toString();
-        String url = base + lat + lon + radius + cuisines;
+        User user = User.getInstance();
+        boolean seenBofore = user.compareCategories(categories);
+        if(seenBofore && user.lastSearchRestaurants.size() > 0){
+            Intent i = new Intent(RestaurantSearchActivity.this, RestaurantViewActivity.class);
+            //i.putExtra("EXTRA_RESTAURANTS", results);
+            i.putExtra("restaurants", user.lastSearchRestaurants);
+            startActivity(i);
+        } else {
+            //StringRequest stringRequest = searchRestaurantRequest(categories, prices);
+            //queue.add(stringRequest);
+            //String url ="https://developers.zomato.com/api/v2.1/search?lat=39.992981666666665&lon=-83.00122&radius=40000&cuisines=american";
+            String base = "https://developers.zomato.com/api/v2.1/search?";
+            String lat = "lat=" + latitude;
+            String lon = "&lon=" + longitude;
+            String radius = "&radius=40000";
+            String cuisines = "&cuisines=" + categories.get(0).toString();
+            String url = base + lat + lon + radius + cuisines;
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    User u = User.getInstance();
+                    HashMap<String, String[]> results = new HashMap<>();
+                    try {
+                        String rest = response.getString("restaurants");
 
-                HashMap<String, String[]> results = new HashMap<>();
-                try {
-                    String rest = response.getString("restaurants");
+                        JSONArray restuarants = new JSONArray(rest);
 
-                    JSONArray restuarants = new JSONArray(rest);
+                        for(int i = 0; i<restuarants.length(); i++){
+                            JSONObject current = restuarants.getJSONObject(i);
+                            JSONObject v = current.getJSONObject("restaurant");
 
-                    for(int i = 0; i<restuarants.length(); i++){
-                        JSONObject current = restuarants.getJSONObject(i);
-                        JSONObject v = current.getJSONObject("restaurant");
+                            String name = v.getString("name");
+                            JSONObject location = v.getJSONObject("location");
+                            String addr = location.getString("address");
+                            int price = v.getInt("price_range");
+                            String menu = v.getString("menu_url");
 
-                        String name = v.getString("name");
-                        JSONObject location = v.getJSONObject("location");
-                        String addr = location.getString("address");
-                        int price = v.getInt("price_range");
-                        String menu = v.getString("menu_url");
+                            String [] info = {name, addr, Integer.toString(price), menu};
+                            results.put(name, info);
+                        }
 
-                        String [] info = {name, addr, Integer.toString(price), menu};
-                        results.put(name, info);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
-                //now handle the response
+                    u.setLastSearchRestaurants(results);
+                    u.setLastCategories(categories);
+                    //now handle the response
 //                Toast.makeText(getApplicationContext(), "HOLY SHIT!!!", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(RestaurantSearchActivity.this, RestaurantViewActivity.class);
-                //i.putExtra("EXTRA_RESTAURANTS", results);
-                i.putExtra("restaurants", results);
-                startActivity(i);
+                    Intent i = new Intent(RestaurantSearchActivity.this, RestaurantViewActivity.class);
+                    //i.putExtra("EXTRA_RESTAURANTS", results);
+                    i.putExtra("restaurants", results);
+                    startActivity(i);
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
 
-                //handle the error
-                Toast.makeText(getApplicationContext(), "An error occurred", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
+                    //handle the error
+                    Toast.makeText(getApplicationContext(), "An error occurred", Toast.LENGTH_SHORT).show();
+                    error.printStackTrace();
 
-            }
-        }) {    //this is the part, that adds the header to the request
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("user-key", "999236cc9cbf98aeefddb478ef61b27b");
-                params.put("content-type", "application/json");
-                return params;
-            }
-        };
-        queue.add(request);
+                }
+            }) {    //this is the part, that adds the header to the request
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("user-key", "999236cc9cbf98aeefddb478ef61b27b");
+                    params.put("content-type", "application/json");
+                    return params;
+                }
+            };
+            queue.add(request);
+        }
+
+
+
+
 
     }
 

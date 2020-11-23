@@ -80,7 +80,7 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
         db = DatabaseHelper.getInstance(getContext());
         mRecipeListView = v.findViewById(R.id.list);
 
-        customAdapter = new CustomAdapter(getActivity(), list, RecipeSearchResultsFragment.this);
+
 
         return v;
     }
@@ -92,36 +92,49 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
     }
 
     public void SearchIngredients(){
-        String url_prefix = "https://api.edamam.com/search";
-        String name_searches = "?q=";
-        String app_id = "&app_id=3658f3fd";
-        String API = "&app_key=c067d1f070733bd6232423f5a5fe4b00";
-        String number = "&from=0&to=100";
-        for(int i = 0; i < parsed_ingredients.length; i++){
-            if(parsed_ingredients[i] != null){
-                name_searches += parsed_ingredients[i];
-            }
-            if(i < parsed_ingredients.length){
-                name_searches += ",";
-            }
-        }
-        String url = url_prefix+name_searches+app_id+API+number;
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                json_request = response;
-                ParseResponse();
+        final User user = User.getInstance();
+        boolean seenBefore = user.compareIngredients(parsed_ingredients);
+        if(seenBefore && user.lastSearchRecipes.size() > 0){
+            list = user.lastSearchRecipes;
+            customAdapter = new CustomAdapter(getActivity(), list, RecipeSearchResultsFragment.this);
+            mRecipeListView.setAdapter(customAdapter);
+            mRecipeListView.setOnItemClickListener(this);
+        } else {
+            String url_prefix = "https://api.edamam.com/search";
+            String name_searches = "?q=";
+            String app_id = "&app_id=3658f3fd";
+            String API = "&app_key=c067d1f070733bd6232423f5a5fe4b00";
+            String number = "&from=0&to=100";
+            for(int i = 0; i < parsed_ingredients.length; i++){
+                if(parsed_ingredients[i] != null){
+                    name_searches += parsed_ingredients[i];
+                }
+                if(i < parsed_ingredients.length){
+                    name_searches += ",";
+                }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), "Search Returned No Results", Toast.LENGTH_SHORT);
-                json_request = null;
-                ParseResponse();
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
+            String url = url_prefix+name_searches+app_id+API+number;
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    json_request = response;
+                    user.setLastIngredients(parsed_ingredients);
+                    ParseResponse();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getActivity(), "Search Returned No Results", Toast.LENGTH_SHORT);
+                    json_request = null;
+                    ParseResponse();
+                }
+            });
+            requestQueue.add(jsonObjectRequest);
+        }
+
+
     }
 
     public void ParseResponse(){
@@ -143,6 +156,10 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
             startActivity(new Intent(getActivity().getApplicationContext(), RecipeSearchActivity.class));
         }
 
+        User u = User.getInstance();
+        u.setLastSearchRecipes(list);
+
+        customAdapter = new CustomAdapter(getActivity(), list, RecipeSearchResultsFragment.this);
         mRecipeListView.setAdapter(customAdapter);
         mRecipeListView.setOnItemClickListener(this);
     }
