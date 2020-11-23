@@ -25,6 +25,8 @@ public class FavoriteRecipeActivity extends AppCompatActivity implements View.On
 
     DatabaseHelper db;
     FavRecipeAdapter adapter;
+    ArrayList<RecipeObject> favorites = new ArrayList<>();
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +40,14 @@ public class FavoriteRecipeActivity extends AppCompatActivity implements View.On
 
         ListView listView = findViewById(R.id.favListView);
 
-        ArrayList<RecipeObject> favorites = new ArrayList<>();
+        user = User.getInstance();
 
-        favorites = db.getFavoriteRecipes();
+        if(user.getFavoriteRecipes().size() > 0){
+            favorites = user.getFavoriteRecipes();
+        } else {
+            favorites = db.getFavoriteRecipes();
+            user.setFavoriteRecipes(favorites);
+        }
 
         adapter = new FavRecipeAdapter(this, R.layout.fav_recipe_info, favorites);
         listView.setAdapter(adapter);
@@ -53,6 +60,12 @@ public class FavoriteRecipeActivity extends AppCompatActivity implements View.On
             if(r.getLabel().equals(tag)){
                 db.deleteFavoriteRecipe(r.getLabel());
                 break;
+            }
+        }
+
+        for (int i = 0; i < favorites.size(); i++) {
+            if(favorites.get(i).getLabel().equals(tag)){
+                favorites.remove(i);
             }
         }
 

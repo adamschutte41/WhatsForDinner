@@ -20,6 +20,8 @@ public class FavoriteRestaurantActivity extends AppCompatActivity implements Vie
 
     FavRestaurantAdapter adapter;
     DatabaseHelper db;
+    User user;
+    ArrayList<Restaurant> favorites = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +35,16 @@ public class FavoriteRestaurantActivity extends AppCompatActivity implements Vie
 
         ListView listView = findViewById(R.id.favListView);
 
-        ArrayList<Restaurant> favorites = new ArrayList<>();
+        user = User.getInstance();
 
-        favorites = db.getFavoriteRestaurants();
+        if(user.getFavoriteRestaurants().size() > 0){
+            favorites = user.getFavoriteRestaurants();
+        } else {
+            favorites = db.getFavoriteRestaurants();
+            user.setFavoriteRestaurants(favorites);
+        }
+
+
 
         adapter = new FavRestaurantAdapter(this, R.layout.fav_restaurant_info, favorites);
         listView.setAdapter(adapter);
@@ -51,6 +60,14 @@ public class FavoriteRestaurantActivity extends AppCompatActivity implements Vie
                 break;
             }
         }
+
+        for (int i = 0; i < favorites.size(); i++) {
+            if(favorites.get(i).name.equals(tag)){
+                favorites.remove(i);
+            }
+        }
+
+        user.setFavoriteRestaurants(favorites);
 
         finish();
         startActivity(getIntent());
