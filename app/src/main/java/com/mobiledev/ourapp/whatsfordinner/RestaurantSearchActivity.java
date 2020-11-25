@@ -17,6 +17,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -233,7 +234,13 @@ public class RestaurantSearchActivity extends AppCompatActivity implements View.
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurant_search);
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+
+        if(rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270){
+            setContentView(R.layout.activity_restaurant_search_land);
+        }else {
+            setContentView(R.layout.activity_restaurant_search);
+        }
 
         ListView myListView = findViewById(R.id.myListView);
         Button submitBtn = findViewById(R.id.submitBtn);

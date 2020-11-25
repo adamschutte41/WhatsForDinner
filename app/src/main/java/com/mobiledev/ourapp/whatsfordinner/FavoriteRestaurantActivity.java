@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -26,7 +27,13 @@ public class FavoriteRestaurantActivity extends AppCompatActivity implements Vie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorite_restaurant);
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+
+        if(rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270){
+            setContentView(R.layout.activity_favorite_restaurant_land);
+        }else {
+            setContentView(R.layout.activity_favorite_restaurant_land);
+        }
 
         db = DatabaseHelper.getInstance(getApplicationContext());
 

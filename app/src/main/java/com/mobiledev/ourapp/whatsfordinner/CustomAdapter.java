@@ -1,7 +1,9 @@
 package com.mobiledev.ourapp.whatsfordinner;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +72,7 @@ class CustomAdapter implements ListAdapter, View.OnClickListener {
             saveFavorite = convertView.findViewById(R.id.deleteFavoriteRecipe);
             saveFavorite.setTag(subjectData.SubjectName);
             saveFavorite.setOnClickListener(this);
+            imag.setOnClickListener(this);
             convertView.setTag(tittle);
             Picasso.with(context)
                     .load(subjectData.Image)

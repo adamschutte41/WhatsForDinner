@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -26,7 +27,13 @@ public class RestaurantViewActivity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurant_view);
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+
+        if(rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270){
+            setContentView(R.layout.activity_restaurant_view_land);
+        }else {
+            setContentView(R.layout.activity_restaurant_view);
+        }
 
         ListView resListView = findViewById(R.id.favListView);
         Button backBtn = findViewById(R.id.backBtn);
