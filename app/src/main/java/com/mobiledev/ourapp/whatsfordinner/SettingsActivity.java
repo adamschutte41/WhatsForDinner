@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,7 +17,13 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+
+        if(rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270){
+            setContentView(R.layout.activity_settings_land);
+        }else {
+            setContentView(R.layout.activity_settings);
+        }
 
         Button favoritesBtn = findViewById(R.id.favoriteRecBtn);
         favoritesBtn.setOnClickListener(new View.OnClickListener(){

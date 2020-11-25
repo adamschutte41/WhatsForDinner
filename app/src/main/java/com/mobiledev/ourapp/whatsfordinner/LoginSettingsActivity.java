@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,7 +47,13 @@ public class LoginSettingsActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_settings);
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+
+        if(rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270){
+            setContentView(R.layout.activity_login_settings_land);
+        }else {
+            setContentView(R.layout.activity_login_settings);
+        }
 
 
         Button submitBtn = findViewById(R.id.submitBtn);
