@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,7 @@ class CustomAdapter implements ListAdapter, View.OnClickListener {
             saveFavorite.setTag(subjectData.SubjectName);
             saveFavorite.setOnClickListener(this);
             viewRecipe = convertView.findViewById(R.id.viewRecipe);
+            viewRecipe.setTag(subjectData.SubjectName);
             viewRecipe.setOnClickListener(this);
             URL = subjectData.Link;
             imag.setOnClickListener(this);
@@ -110,13 +112,15 @@ class CustomAdapter implements ListAdapter, View.OnClickListener {
                 tag = (String) view.getTag();
 
                 for (SubjectData r : arrayList) {
-                    if(r.SubjectName.equals(subjectData.SubjectName)){
+                    if(r.SubjectName.equals(tag)){
                         result = r.Link;
                         break;
                     }
                 }
 
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(result));
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(result));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
                 break;
         }
