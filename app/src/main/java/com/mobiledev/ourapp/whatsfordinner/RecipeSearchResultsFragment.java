@@ -161,7 +161,7 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
 
         customAdapter = new CustomAdapter(getActivity(), list, RecipeSearchResultsFragment.this);
         mRecipeListView.setAdapter(customAdapter);
-        mRecipeListView.setOnItemClickListener(this);
+        //mRecipeListView.setOnItemClickListener(this);
     }
 
     @Override
@@ -193,22 +193,6 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
         }else {
             Toast.makeText(getActivity(), "ERROR saving recipe", Toast.LENGTH_LONG).show();
         }
-    }
-
-    public void viewRecipe(String tag){
-        String result = "";
-
-        for (SubjectData r : customAdapter.arrayList) {
-            if(r.SubjectName.equals(tag)){
-                result = r.Link;
-                break;
-            }
-        }
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(result));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 
     @Override
