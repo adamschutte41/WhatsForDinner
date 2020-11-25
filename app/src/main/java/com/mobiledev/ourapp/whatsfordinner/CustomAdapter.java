@@ -18,6 +18,7 @@ class CustomAdapter implements ListAdapter, View.OnClickListener {
     ArrayList<SubjectData> arrayList;
     Context context;
     Button saveFavorite;
+    Button viewRecipe;
     EventListener eventListener;
     SubjectData subjectData;
 
@@ -72,6 +73,8 @@ class CustomAdapter implements ListAdapter, View.OnClickListener {
             saveFavorite = convertView.findViewById(R.id.deleteFavoriteRecipe);
             saveFavorite.setTag(subjectData.SubjectName);
             saveFavorite.setOnClickListener(this);
+            viewRecipe = convertView.findViewById(R.id.viewRecipe);
+            viewRecipe.setOnClickListener(this);
             imag.setOnClickListener(this);
             convertView.setTag(tittle);
             Picasso.with(context)
@@ -95,7 +98,28 @@ class CustomAdapter implements ListAdapter, View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        String tag = (String) view.getTag();
-        eventListener.onEvent(tag);
+        switch(view.getId()){
+            case R.id.deleteFavoriteRecipe:
+                String tag = (String) view.getTag();
+                eventListener.onEvent(tag);
+                break;
+            case R.id.viewRecipe:
+                String result = "";
+                tag = (String) view.getTag();
+
+                for (SubjectData r : arrayList) {
+                    if(r.SubjectName.equals(tag)){
+                        result = r.Link;
+                        break;
+                    }
+                }
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(result));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                RecipeSearchResultsActivity activity = (RecipeSearchResultsActivity)context;
+                context.startActivity(intent);
+                break;
+        }
     }
 }

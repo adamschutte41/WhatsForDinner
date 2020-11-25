@@ -195,6 +195,22 @@ public class RecipeSearchResultsFragment extends Fragment implements View.OnClic
         }
     }
 
+    public void viewRecipe(String tag){
+        String result = "";
+
+        for (SubjectData r : customAdapter.arrayList) {
+            if(r.SubjectName.equals(tag)){
+                result = r.Link;
+                break;
+            }
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(result));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
     @Override
     public void onClick(View view) {
         Activity activity = getActivity();
