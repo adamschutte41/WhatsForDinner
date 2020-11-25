@@ -11,10 +11,10 @@
         android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="28dp"
         android:padding="5dip"
         app:layout_constraintTop_toBottomOf="@+id/deleteFavoriteRecipe"
-        tools:layout_editor_absoluteX="5dp">
+        tools:layout_editor_absoluteX="4dp">
 
         <LinearLayout
             android:id="@+id/thumbnail"
@@ -51,11 +51,11 @@
         android:id="@+id/deleteFavoriteRecipe"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="Delete Favorite Recipe"
+        android:text="Delete"
         android:textSize="20dip"
         android:typeface="sans"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,14 +65,16 @@
         android:id="@+id/viewFavoriteRecipe"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginLeft="112dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="View Favorite Recipe"
+        android:text="View"
         android:textSize="20dip"
         android:typeface="sans"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.455"
+        app:layout_constraintStart_toEndOf="@+id/deleteFavoriteRecipe"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
