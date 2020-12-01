@@ -47,8 +47,6 @@ public class RestaurantViewActivity extends AppCompatActivity implements View.On
         for (HashMap.Entry mapElement : r.entrySet()) {
             String key = (String)mapElement.getKey();
 
-            // Add some bonus marks
-            // to all the students and print it
             String[] value = (String[])mapElement.getValue();
 
             Restaurant rest = new Restaurant(value[0], value[1], Integer.parseInt(value[2]), value[3]);

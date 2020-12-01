@@ -11,8 +11,8 @@
         android:id="@+id/deleteFavoriteRecipe"
         android:layout_width="215dp"
         android:layout_height="55dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="Save to Favorites"
@@ -23,14 +23,12 @@
 
     <Button
         android:id="@+id/viewRecipe"
-        android:layout_width="105dp"
+        android:layout_width="wrap_content"
         android:layout_height="55dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginLeft="44dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
         android:layout_marginTop="16dp"
         android:text="VIEW"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.038"
         app:layout_constraintStart_toEndOf="@+id/deleteFavoriteRecipe"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,10 +36,15 @@
         android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:padding="5dip"
-        app:layout_constraintTop_toBottomOf="@+id/deleteFavoriteRecipe"
-        tools:layout_editor_absoluteX="5dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deleteFavoriteRecipe">
 
         <LinearLayout
             android:id="@+id/thumbnail"

@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         Button eatOutBtn = findViewById(R.id.eatOutBtn);
         Button stayInBtn = findViewById(R.id.stayInBtn);
         Button settingsBtn = findViewById(R.id.settingsBtn);
+        Button signOutBtn = findViewById(R.id.signOutBtn);
 
         stayInBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -49,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+        });
+
+        signOutBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
 

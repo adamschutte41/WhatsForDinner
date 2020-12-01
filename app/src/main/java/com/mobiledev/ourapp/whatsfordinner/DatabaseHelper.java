@@ -507,6 +507,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         }
 
+        User u = User.getInstance();
+        u.hasRestDBChanged = true;
 
 
         return fav_id;
@@ -540,6 +542,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             fav_id = createFavoriteRecipe(rest_id);
 
         }
+
+        User u = User.getInstance();
+        u.hasRecDBChanged = true;
 
         return fav_id;
     }

@@ -11,10 +11,15 @@
         android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
         android:layout_marginTop="28dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
         android:padding="5dip"
-        app:layout_constraintTop_toBottomOf="@+id/deleteFavoriteRecipe"
-        tools:layout_editor_absoluteX="4dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deleteFavoriteRecipe">
 
         <LinearLayout
             android:id="@+id/thumbnail"
@@ -51,8 +56,8 @@
         android:id="@+id/deleteFavoriteRecipe"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="Delete"
@@ -65,8 +70,6 @@
         android:id="@+id/viewFavoriteRecipe"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="112dp"
-        android:layout_marginLeft="112dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="View"

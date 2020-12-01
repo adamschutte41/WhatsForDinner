@@ -18,12 +18,11 @@ public class User {
     ArrayList<RecipeObject> favoriteRecipes = new ArrayList<RecipeObject>();
     ArrayList<Integer> lastCategories = new ArrayList<Integer>();
     ArrayList<String> lastIngredients = new ArrayList<String>();
+    boolean hasRestDBChanged = true;
+    boolean hasRecDBChanged = true;
 
     public static synchronized User getInstance() {
 
-        // Use the application context, which will ensure that you
-        // don't accidentally leak an Activity's context.
-        // See this article for more information: http://bit.ly/6LRzfx
         if (user == null) {
             user = new User();
         }

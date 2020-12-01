@@ -228,6 +228,32 @@ public class RestaurantSearchActivity extends AppCompatActivity implements View.
             case "Italian":
                 result = 55;
                 break;
+            case "Asian":
+                result = 3;
+                break;
+            case "BBQ":
+                result = 193;
+                break;
+            case "Breakfast":
+                result = 162;
+                break;
+            case "Cajun":
+                result = 491;
+                break;
+            case "German":
+                result = 134;
+                break;
+            case "Greek":
+                result = 156;
+                break;
+            case "Indian":
+                result = 148;
+                break;
+            case "Sushi":
+                result = 177;
+                break;
+            default:
+                result = 1;
         }
         return result;
     }
@@ -256,6 +282,14 @@ public class RestaurantSearchActivity extends AppCompatActivity implements View.
         restaurants.add(new Restaurant("Taco Bell", "Mexican", 1));
         restaurants.add(new Restaurant("AppleBees", "American", 2));
         restaurants.add(new Restaurant("Bravo", "Italian", 2));
+        restaurants.add(new Restaurant("Panda Express", "Asian", 1));
+        restaurants.add(new Restaurant("City Barbecue", "BBQ", 2));
+        restaurants.add(new Restaurant("IHOP", "Breakfast", 2));
+        restaurants.add(new Restaurant("Cajun Food", "Cajun", 1));
+        restaurants.add(new Restaurant("Hofbrauhaus", "German", 3));
+        restaurants.add(new Restaurant("Gyros", "Greek", 1));
+        restaurants.add(new Restaurant("Indian", "Indian", 3));
+        restaurants.add(new Restaurant("Fushian Sushi", "Sushi", 2));
 
         queue = Volley.newRequestQueue(this);
         adapter = new MyCustomAdapter(this, R.layout.restaurant_info, restaurants);
