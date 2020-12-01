@@ -32,7 +32,7 @@ public class FavoriteRestaurantActivity extends AppCompatActivity implements Vie
         if(rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270){
             setContentView(R.layout.activity_favorite_restaurant_land);
         }else {
-            setContentView(R.layout.activity_favorite_restaurant_land);
+            setContentView(R.layout.activity_favorite_restaurant);
         }
 
         db = DatabaseHelper.getInstance(getApplicationContext());
@@ -44,11 +44,12 @@ public class FavoriteRestaurantActivity extends AppCompatActivity implements Vie
 
         user = User.getInstance();
 
-        if(user.getFavoriteRestaurants().size() > 0){
+        if(!user.hasRestDBChanged && user.getFavoriteRestaurants().size() > 0){
             favorites = user.getFavoriteRestaurants();
         } else {
             favorites = db.getFavoriteRestaurants();
             user.setFavoriteRestaurants(favorites);
+            user.hasRestDBChanged = false;
         }
 
 
@@ -75,7 +76,7 @@ public class FavoriteRestaurantActivity extends AppCompatActivity implements Vie
         }
 
         user.setFavoriteRestaurants(favorites);
-
+        user.hasRestDBChanged = true;
         finish();
         startActivity(getIntent());
     }

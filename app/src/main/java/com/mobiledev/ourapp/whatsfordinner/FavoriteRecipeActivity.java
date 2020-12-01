@@ -49,15 +49,17 @@ public class FavoriteRecipeActivity extends AppCompatActivity implements View.On
 
         user = User.getInstance();
 
-        if(user.getFavoriteRecipes().size() > 0){
+        if(!user.hasRecDBChanged && user.getFavoriteRecipes().size() > 0){
             favorites = user.getFavoriteRecipes();
         } else {
             favorites = db.getFavoriteRecipes();
             user.setFavoriteRecipes(favorites);
+            user.hasRestDBChanged = false;
         }
 
         adapter = new FavRecipeAdapter(this, R.layout.fav_recipe_info, favorites);
         listView.setAdapter(adapter);
+
     }
 
     public void deleteFavoriteRestaurant(String tag){
@@ -76,6 +78,8 @@ public class FavoriteRecipeActivity extends AppCompatActivity implements View.On
             }
         }
 
+        user.setFavoriteRecipes(favorites);
+        user.hasRestDBChanged = true;
         finish();
         startActivity(getIntent());
     }

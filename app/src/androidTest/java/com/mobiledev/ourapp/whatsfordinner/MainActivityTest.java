@@ -44,20 +44,37 @@ public class MainActivityTest extends ActivityTestRule<MainActivity>{
 
     @Test
     public void StayInBtnTest() throws Throwable{
-        Button btn = mainActivity.findViewById(R.id.stayInBtn);
-        assertTrue(btn.performClick());
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Button btn = mainActivity.findViewById(R.id.stayInBtn);
+                assertTrue(btn.performClick());
+            }
+        });
     }
 
     @Test
     public void eatOutBtnTest() throws Throwable{
-        Button btn = mainActivity.findViewById(R.id.eatOutBtn);
-        assertTrue(btn.performClick());
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Button btn = mainActivity.findViewById(R.id.eatOutBtn);
+                assertTrue(btn.performClick());
+            }
+        });
     }
 
     @Test
     public void settingsBtnTest() throws Throwable{
-        Button btn = mainActivity.findViewById(R.id.settingsBtn);
-        assertTrue(btn.performClick());
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Button btn = mainActivity.findViewById(R.id.settingsBtn);
+                assertTrue(btn.performClick());
+            }
+        });
     }
+
+
 
 }

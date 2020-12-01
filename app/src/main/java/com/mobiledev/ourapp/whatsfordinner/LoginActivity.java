@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         long result = user.getUser(userIn, passIn);
 
         if(result != -1){
-            Toast.makeText(getApplicationContext(), "WE CAN VIBE", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "WE CAN VIBE", Toast.LENGTH_LONG).show();
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }else {
             Toast.makeText(getApplicationContext(), "LOGIN ERROR", Toast.LENGTH_LONG).show();
@@ -45,20 +45,55 @@ public class LoginActivity extends AppCompatActivity {
         String userIn = newUsername.getText().toString();
         String passIn = newPassword.getText().toString();
 
-        user = User.getInstance();
-        user.setUsername(userIn);
-        user.setPassword(passIn);
-        user.setContext(getApplicationContext());
-        long result = user.createUser();
-
-        if(result != -1){
-//            Toast.makeText(getApplicationContext(), "WE CAN VIBE", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        if(passIn.length() < 5){
+            Toast.makeText(getApplicationContext(), "Password must be more than 5 characters", Toast.LENGTH_SHORT).show();
+        } else if (userIn.length() < 1){
+            Toast.makeText(getApplicationContext(), "Username can't be empty", Toast.LENGTH_SHORT).show();
+        } else if(!containsDigit(passIn)){
+            Toast.makeText(getApplicationContext(), "Password must contain a digit", Toast.LENGTH_SHORT).show();
+        }else if(!containsChar(passIn)){
+            Toast.makeText(getApplicationContext(), "Password must contain a character", Toast.LENGTH_SHORT).show();
         }else {
-            Toast.makeText(getApplicationContext(), "LOGIN ERROR", Toast.LENGTH_LONG).show();
+            user = User.getInstance();
+            user.setUsername(userIn);
+            user.setPassword(passIn);
+            user.setContext(getApplicationContext());
+            long result = user.createUser();
+
+            if(result != -1){
+//            Toast.makeText(getApplicationContext(), "WE CAN VIBE", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }else {
+                Toast.makeText(getApplicationContext(), "LOGIN ERROR", Toast.LENGTH_LONG).show();
+            }
         }
 
+    }
 
+    public final boolean containsDigit(String s) {
+        boolean containsDigit = false;
+
+        for (char c : s.toCharArray()) {
+            if (Character.isDigit(c)) {
+                containsDigit = true;
+                break;
+            }
+        }
+
+        return containsDigit;
+    }
+
+    public final boolean containsChar(String s) {
+        boolean containsChar = false;
+
+        for (char c : s.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                containsChar = true;
+                break;
+            }
+        }
+
+        return containsChar;
     }
 
     @Override
