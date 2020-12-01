@@ -192,27 +192,46 @@ public class RestaurantSearchActivity extends AppCompatActivity implements View.
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
 
-            }
-        };
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Toast.makeText(getApplicationContext(), "Turn on Location", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(RestaurantSearchActivity.this, MainActivity.class));
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            if (locationManager != null) {
-                Location location = locationManager
-                        .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }else if(!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            Toast.makeText(getApplicationContext(), "No network provider", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(RestaurantSearchActivity.this, MainActivity.class));
+        }else {
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
 
-                if (location != null) {
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
+                }
+            };
+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            } else {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                if (locationManager != null) {
+                    Location location = locationManager
+                            .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                    if (location != null) {
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                    }
                 }
             }
         }
+
+
+//        try {
+//            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+//        } catch(Exception ex) {}
+
+
     }
 
     public int convertCat(String oldCategory){
